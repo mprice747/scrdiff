@@ -1,11 +1,11 @@
 Package: scrdiff
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Stationary Point Constrained Regression with Diffeomorphisms
 Version: 0.1.0
 Authors@R: c(
     person(
-      "Jane", "Doe",
-      email = "jane@example.com",
+      "Michael", "Price",
+      email = "mprice@tamu.edu",
       role = c("aut", "cre")
     )
   )
@@ -14,3 +14,23 @@ Description: More about what it does (maybe more than one line).
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
+Imports: 
+    abind,
+    CompQuadForm,
+    devtools,
+    doParallel,
+    doSNOW,
+    emulator,
+    foreach,
+    Matrix,
+    matrixcalc,
+    mvtnorm,
+    pracma,
+    progress,
+    R.utils,
+    Rsolnp,
+    stats,
+    utils
+Remotes:
+    github::chenghanyustats/dgp
+RoxygenNote: 7.3.3
