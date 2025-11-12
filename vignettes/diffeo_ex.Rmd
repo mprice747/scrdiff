@@ -1,8 +1,11 @@
 ---
 title: "Stationary Point Constrained Regression via Diffeomorphism Example"
-output: rmarkdown::html_vignette
+output:
+  pdf_document:
+    toc: true
+    number_sections: true
 vignette: >
-  %\VignetteIndexEntry{diffeo_ex}
+  %\VignetteIndexEntry{Stationary Point Constrained Regression via Diffeomorphism Example}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
