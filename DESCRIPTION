@@ -19,6 +19,7 @@ Imports:
     CompQuadForm,
     devtools,
     doParallel,
+    parallel,
     doSNOW,
     emulator,
     foreach,
@@ -34,3 +35,7 @@ Imports:
 Remotes:
     github::chenghanyustats/dgp
 RoxygenNote: 7.3.3
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

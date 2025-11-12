@@ -92,6 +92,8 @@ find_modes <- function(num_searches, input_X, input_Y, num_betas,
                        first_direction, zero_is_zero, interpolation, b_vec,
                        prior_mean, prior_sd, w_0 = 1){
 
+  `%dopar%` <- foreach::`%dopar%`
+
   print("Finding Modes:")
   cl <- parallel::makeCluster(parallel::detectCores())
   doSNOW::registerDoSNOW(cl)

@@ -90,6 +90,8 @@ mcmc_parallel <- function(posterior_modes, n_per_chain, input_X, input_Y, num_be
                           first_direction, zero_is_zero, interpolation, b_vec,
                           prior_mean, prior_sd, dim_parameter) {
 
+  `%dopar%` <- foreach::`%dopar%`
+
   # Make a progress bar for MCMC Chain
   print("MCMC Progress:")
   cl <- parallel::makeCluster(parallel::detectCores())

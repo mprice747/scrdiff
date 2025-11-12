@@ -172,7 +172,7 @@ find_map <- function(num_searches, input_X, input_Y, num_betas, first_direction,
 #' stationary points are outputted
 #' @param X length n vector, x points (input data)
 #' @param Y length n vector, y points (output data)
-#' @param num_betas positive integer, number of weight parameters for the diffeomorphism
+#' @param num_betas positive integer > 1, number of weight parameters for the diffeomorphism
 #' @param num_stationary positive integer, number of stationary points
 #' @param first_direction 1 or -1, 1 if the function is increasing between min(X) and the first
 #' stationary point, -1 if the function is decreasing
@@ -180,19 +180,19 @@ find_map <- function(num_searches, input_X, input_Y, num_betas, first_direction,
 #' estimated
 #' @param interpolation 'cubic' or 'linear', referring to interpolation type of lambda height vector
 #' @param b_vec NULL or vector of length num_stationary + 2, nodes of template function. If NULL, nodes
-#' will be equally spaced from eqach other
-#' @param prior_mean p dimensional vector of prior mean (Joint Independent Normal)
-#' @param prior_sd p dimension vector of prior sds (Joint Independent Normal)
+#' will be equally spaced from each other
+#' @param prior_mean (num_betas + num_stationary + 3 (2 height vectors at boundaries and for sigma)) dimensional vector of prior mean (Joint Independent Normal)
+#' @param prior_sd (num_betas + num_stationary + 3 (2 height vectors at boundaries and for sigma)) dimension vector of prior standard deviations (Joint Independent Normal)
 #' @param n_chains positive integer, number of MCMC chains
 #' @param n_per_chain positive integer, number of samples per MCMC chain
-#' @param cov_scale - positive real number, scaling factor for proposal covariance matrices of MCMC chains
+#' @param cov_scale positive real number, scaling factor for proposal covariance matrices of MCMC chains (should be in between 1/6 and 1, higher dimensions should have a lower cov_scale)
 #' @param apply_sm_correction boolean, whether to filter out low probability posterior modes via softmax correction
 #' @returns A list with the components
 #' \describe{
 #'   \item{diff_stat_points}{List of length \code{num_stationary}, posterior samples for each stationary point}
 #'   \item{intervals_list_diff}{List of matrices, 90, 95, 99 and Bonferroni Corrected Intervals for each stationary point}
 #'   \item{diff_post_cov}{Posterior covariance of stationary points}
-#'   \item{diff_map_par}{MAP of unconstrained parameterization}
+#'   \item{diff_map_par}{MAP of parameters}
 #'   \item{diff_map_stat_points}{MAP of the stationary points}
 #'   \item{map_predictions}{Matrix with X grid and MAP estimate of f(X)}
 #'   \item{posterior_modes}{List of posterior modes, likelihoods, inverse Hessians}
@@ -218,9 +218,10 @@ posterior_stat_points_diff_mcmc <- function(X, Y, num_betas, num_stationary, fir
   }
 
   # Get MAP result
-  map_result <- find_map(n_chains, input_X, input_Y, num_betas, first_direction,
-                         zero_is_zero, interpolation, b_vec,
-                         prior_mean, prior_sd)
+  map_result <- suppressWarnings(find_map(n_chains, input_X, input_Y, num_betas,
+                                          first_direction, zero_is_zero,
+                                          interpolation, b_vec,
+                         prior_mean, prior_sd))
 
 
   # Get posterior modes and the inverse Hessians
@@ -232,9 +233,10 @@ posterior_stat_points_diff_mcmc <- function(X, Y, num_betas, num_stationary, fir
 
   # Sample from posterior using standard Metropolis Hastings, using inverse Hessians as
   # proposal covariance matrices
-  mcmc_samples <- mcmc_parallel(posterior_modes, n_per_chain, input_X, input_Y, num_betas,
+  mcmc_samples <- suppressWarnings(mcmc_parallel(posterior_modes, n_per_chain,
+                                                 input_X, input_Y, num_betas,
                                 first_direction, zero_is_zero, interpolation, b_vec,
-                                prior_mean, prior_sd, cov_scale)
+                                prior_mean, prior_sd, cov_scale))
 
   print("Calculating Stationary Points")
   resampled <- do.call(rbind, mcmc_samples$mcmc_samples)
@@ -289,10 +291,3 @@ posterior_stat_points_diff_mcmc <- function(X, Y, num_betas, num_stationary, fir
 
 
 }
-
-
-
-
-
-
-

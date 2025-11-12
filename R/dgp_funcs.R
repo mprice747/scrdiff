@@ -132,7 +132,8 @@ posterior_stat_points_dgp <- function(X, Y, num_stationary, total_samples,
   cdf_post_prob_gp <- cdf_post_prob_gp/cdf_post_prob_gp[5000]
 
   # Obtain Samples by Inverse transform method
-  sample_t <- pracma::interp1(cdf_post_prob_gp[, 1], grid_t, stats::runif(total_samples))
+  sample_t <- supressWarnings(pracma::interp1(cdf_post_prob_gp[, 1],
+                                              grid_t, stats::runif(total_samples)))
 
   # Post process samples
   return(dgp_post_processing(sample_t, num_stationary, grid_t, post_prob_gp))
