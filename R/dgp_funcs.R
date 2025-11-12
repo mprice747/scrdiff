@@ -92,6 +92,7 @@ create_H0_matrix <- function(x_vec) {
 #'    min(X) to max(X)}
 #' }
 #' @export
+#' @importFrom emulator quad.form.inv
 posterior_stat_points_dgp <- function(X, Y, num_stationary, total_samples,
                                       beta_shape1 = 1, beta_shape2 = 1) {
 
@@ -117,7 +118,7 @@ posterior_stat_points_dgp <- function(X, Y, num_stationary, total_samples,
 
   for (j in 1:5000){
 
-    log_post_gp[j] <- dgp::log_post_t_theory(t = grid_t[j], y = Y, x = X,
+    log_post_gp[j] <- log_post_t_theory(t = grid_t[j], y = Y, x = X,
                                         Kff = Kff_gp, A = A_gp, lambda = lambda_gp,
                                         h = EB_gp[3], sig2 = EB_gp[1]^2,
                                         shape1 = beta_shape1, shape2 = beta_shape2,
@@ -132,7 +133,7 @@ posterior_stat_points_dgp <- function(X, Y, num_stationary, total_samples,
   cdf_post_prob_gp <- cdf_post_prob_gp/cdf_post_prob_gp[5000]
 
   # Obtain Samples by Inverse transform method
-  sample_t <- supressWarnings(pracma::interp1(cdf_post_prob_gp[, 1],
+  sample_t <-suppressWarnings(pracma::interp1(cdf_post_prob_gp[, 1],
                                               grid_t, stats::runif(total_samples)))
 
   # Post process samples

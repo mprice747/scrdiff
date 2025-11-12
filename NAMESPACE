@@ -2,3 +2,4 @@
 
 export(posterior_stat_points_dgp)
 export(posterior_stat_points_diff_mcmc)
+importFrom(emulator,quad.form.inv)
