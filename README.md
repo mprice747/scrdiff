@@ -1,6 +1,6 @@
 # Stationary Point Constrained Regression Via Diffeomorphisms
 
-Supplementary Package for *Stationary Point Constrained Regression* by Price et. al. We propose a nonparametric regression framework where we specify the number of *stationary points*, or points where the derivative equals 0. We represent the function as a composition of a simple *template* function $g$ (a differentiable interpolation with specified stationary points) and a *diffeomorphism* $\gamma$, a bijective, differentiable mapping of the input space $[a, b]$. Put mathematically,
+Supplementary Package for *Stationary Point Constrained Regression via Diffeomorphisms* by Price et al. We propose a nonparametric regression framework where we specify the number of *stationary points*, or points where the derivative equals 0. We represent the function as a composition of a simple *template* function $g$ (a differentiable interpolation with specified stationary points) and a *diffeomorphism* $\gamma$, a bijective, differentiable mapping of the input space $[a, b]$. Put mathematically,
 
 ``` math
 y_{i} = g(\gamma(x_{i})) + \epsilon_{i} \quad \epsilon_{i} \sim N(0, \sigma^2)
