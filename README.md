@@ -1,10 +1,12 @@
 # Stationary Point Constrained Regression Via Diffeomorphisms
 
-Supplementary Package for *Stationary Point Constrained Regression* by Price et. al. We propose a nonparametric regression framework where we specify the number of *stationary points*, or points where the derivative equals 0. We represent the function as a composition of a simple *template* function $g$ (a differentiable interpolation with specified stationary points) and a *diffeomorphism* $\gamma$, a bijective, differentiable mapping of the input space $[a, b]$. Put mathemtically, $$
-y_{i} = g(\gamma(x_{i})) + \epsilon_{i} \quad \epsilon_{i} \sim N(0, \sigma^2)
-$$
+Supplementary Package for *Stationary Point Constrained Regression* by Price et. al. We propose a nonparametric regression framework where we specify the number of *stationary points*, or points where the derivative equals 0. We represent the function as a composition of a simple *template* function $g$ (a differentiable interpolation with specified stationary points) and a *diffeomorphism* $\gamma$, a bijective, differentiable mapping of the input space $[a, b]$. Put mathematically,
 
-In turn, the $i$th stationary point of the function can be estimated by calculating $\gamma^{-1}(b_{i})$, where $b_{i}$ is the $i$th stationary point of the template. These diffeomorphisms can be represented by a transformation of a finite orthogonal basis of square integrable functions, like the cosine basis. A visualization is provided below. Notice that stationary points of the composition and the template correspond to a certain (x, y) point in the first graph.
+``` math
+y_{i} = g(\gamma(x_{i})) + \epsilon_{i} \quad \epsilon_{i} \sim N(0, \sigma^2)
+```
+
+In turn, stationary points of the function can be estimated by calculating $\gamma^{-1}(b_{i})$, where $b_{i}$ is a stationary point of the template. These diffeomorphisms can be represented by a transformation of a finite orthogonal basis of square integrable functions, like the cosine basis. A visualization is provided below. Notice that stationary points of the composition and the template correspond to a certain (x, y) point in the first graph.
 
 <img src="inst/images/gamma_x_cb.png" width="45%"/> <img src="inst/images/template_comp_cb.png" width="45%"/>
 
