@@ -16,7 +16,7 @@ To install the package, copy this code into your R console
 
 ```         
 library(devtools)
-devtools::install_github('mprice747/srcdiff')
+devtools::install_github('mprice747/scrdiff')
 ```
 
 ## Usage
@@ -24,7 +24,7 @@ devtools::install_github('mprice747/srcdiff')
 To load the package, copy this code into your R console or script
 
 ```         
-library(srcdiff)
+library(scrdiff)
 ```
 
 This package performs Bayesian Inference on the model parameters using a simple aggregate Metropolis-Hastings scheme. Multiple chains are initialized near the posterior modes. Calling **posterior_stat_points_diff_mcmc** runs MCMC on the model parameters and posterior samples of the stationary points along with the MAP estimate of the stationary points are outputted. A through example with an explanation of the model parameters is provided in the vignette.
