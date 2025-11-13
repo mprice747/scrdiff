@@ -18,7 +18,8 @@ posterior_stat_points_diff_mcmc(
   n_chains,
   n_per_chain,
   cov_scale,
-  apply_sm_correction = TRUE
+  apply_sm_correction = TRUE,
+  num_cores = "ALL"
 )
 }
 \arguments{
@@ -49,9 +50,11 @@ will be equally spaced from each other}
 
 \item{n_per_chain}{positive integer, number of samples per MCMC chain}
 
-\item{cov_scale}{positive real number, scaling factor for proposal covariance matrices of MCMC chains (should be in between 1/6 and 1, higher dimensions should have a lower cov_scale)}
+\item{cov_scale}{positive real number, scaling factor for proposal covariance matrices of MCMC chains (should be less than 1, higher dimensions should have a lower cov_scale)}
 
 \item{apply_sm_correction}{boolean, whether to filter out low probability posterior modes via softmax correction}
+
+\item{num_cores}{"ALL" or positive integer, number of cores to be used for parallelization, if "ALL", use all cores available}
 }
 \value{
 A list with the components

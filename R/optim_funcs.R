@@ -90,12 +90,18 @@ find_local_minimum <- function(input_X, input_Y, num_betas, first_direction,
 #' @noRd
 find_modes <- function(num_searches, input_X, input_Y, num_betas,
                        first_direction, zero_is_zero, interpolation, b_vec,
-                       prior_mean, prior_sd, w_0 = 1){
+                       prior_mean, prior_sd, w_0 = 1, num_cores){
 
   `%dopar%` <- foreach::`%dopar%`
 
   print("Finding Modes:")
-  cl <- parallel::makeCluster(parallel::detectCores())
+  if(num_cores == "ALL"){
+    num_cores <- parallel::detectCores()
+  }
+
+  cl <- parallel::makeCluster(num_cores)
+
+
   doSNOW::registerDoSNOW(cl)
   funcs <- ls(envir = .GlobalEnv)
 
@@ -104,8 +110,7 @@ find_modes <- function(num_searches, input_X, input_Y, num_betas,
   opts <- list(progress = progress)
 
   # Run BFGS multiple times using parallelization
-  mode_samples <- foreach::foreach(i = 1:num_searches, .packages = c('pracma', 'stats', 'MASS',
-                                                                   'mvtnorm' ),
+  mode_samples <- foreach::foreach(i = 1:num_searches, .packages = c('pracma', 'stats', 'mvtnorm' ),
                               .export = funcs, .options.snow = opts) %dopar% {
 
 

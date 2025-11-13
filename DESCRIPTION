@@ -9,10 +9,7 @@ Authors@R: c(
       role = c("aut", "cre")
     )
   )
-Description: Perform inference on function stationary points (where f'(x) = 0) through the 
-template-diffeomorphism framework introduced by Price et. al. Performs MCMC on 
-model parameters and then applies transformation of diffeomorphism to output a
-joint posterior of the locations of the stationary poits. 
+Description: Perform inference on function stationary points (where f'(x) = 0) through the template-diffeomorphism framework introduced by Price et. al. Performs MCMC on model parameters and then applies transformation of diffeomorphism to output a joint posterior of the locations of the stationary poits. 
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

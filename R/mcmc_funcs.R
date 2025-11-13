@@ -88,13 +88,18 @@ mcmc_one_chain <- function(n, proposal_mean, proposal_cov, input_X, input_Y, num
 #' @noRd
 mcmc_parallel <- function(posterior_modes, n_per_chain, input_X, input_Y, num_betas,
                           first_direction, zero_is_zero, interpolation, b_vec,
-                          prior_mean, prior_sd, dim_parameter) {
+                          prior_mean, prior_sd, dim_parameter, num_cores) {
 
   `%dopar%` <- foreach::`%dopar%`
 
-  # Make a progress bar for MCMC Chain
   print("MCMC Progress:")
-  cl <- parallel::makeCluster(parallel::detectCores())
+  if(num_cores == "ALL"){
+    num_cores <- parallel::detectCores()
+  }
+
+  cl <- parallel::makeCluster(num_cores)
+
+  # Make a progress bar for MCMC Chain
   doSNOW::registerDoSNOW(cl)
   funcs <- ls(envir = .GlobalEnv)
 
@@ -104,7 +109,7 @@ mcmc_parallel <- function(posterior_modes, n_per_chain, input_X, input_Y, num_be
 
   # Obtain MCMC Chains with Parallelizations
   mcmc_samples_all <- foreach::foreach(i = 1:length(posterior_modes), .packages = c('mvtnorm', 'pracma',
-                                                                       'CompQuadForm', 'MASS', 'stats'),
+                                                                       'CompQuadForm', 'stats'),
                               .export = funcs, .options.snow = opts) %dopar% {
 
                                 mcmc_samples <- mcmc_one_chain(n_per_chain, posterior_modes[[i]]$min_par,
@@ -128,15 +133,3 @@ mcmc_parallel <- function(posterior_modes, n_per_chain, input_X, input_Y, num_be
 
   return(list(mcmc_samples = mcmc_samples, acceptance_probs = acceptance_probs))
 }
-
-
-
-
-
-
-
-
-
-
-
-

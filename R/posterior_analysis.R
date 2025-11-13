@@ -145,12 +145,12 @@ apply_softmax_sampling <- function(mode_samples, num_sps){
 #' @noRd
 find_map <- function(num_searches, input_X, input_Y, num_betas, first_direction,
                      zero_is_zero, interpolation, b_vec,
-                     prior_mean, prior_sd) {
+                     prior_mean, prior_sd, num_cores) {
 
   # Find modes and the one with the lowest cost
   modes_found <- find_modes(num_searches, input_X, input_Y, num_betas, first_direction,
                             zero_is_zero, interpolation, b_vec,
-                            prior_mean, prior_sd, 1)
+                            prior_mean, prior_sd, 1, num_cores)
 
 
   min_list <- modes_found[[which.min(sapply(modes_found, function(x) x$min_cost))]]
@@ -185,8 +185,9 @@ find_map <- function(num_searches, input_X, input_Y, num_betas, first_direction,
 #' @param prior_sd (num_betas + num_stationary + 3 (2 height vectors at boundaries and for sigma)) dimension vector of prior standard deviations (Joint Independent Normal)
 #' @param n_chains positive integer, number of MCMC chains
 #' @param n_per_chain positive integer, number of samples per MCMC chain
-#' @param cov_scale positive real number, scaling factor for proposal covariance matrices of MCMC chains (should be in between 1/6 and 1, higher dimensions should have a lower cov_scale)
+#' @param cov_scale positive real number, scaling factor for proposal covariance matrices of MCMC chains (should be less than 1, higher dimensions should have a lower cov_scale)
 #' @param apply_sm_correction boolean, whether to filter out low probability posterior modes via softmax correction
+#' @param num_cores "ALL" or positive integer, number of cores to be used for parallelization, if "ALL", use all cores available
 #' @returns A list with the components
 #' \describe{
 #'   \item{diff_stat_points}{List of length \code{num_stationary}, posterior samples for each stationary point}
@@ -203,7 +204,8 @@ posterior_stat_points_diff_mcmc <- function(X, Y, num_betas, num_stationary, fir
                                             zero_is_zero, interpolation, b_vec,
                                             prior_mean, prior_sd,
                                        n_chains, n_per_chain, cov_scale,
-                                       apply_sm_correction = TRUE) {
+                                       apply_sm_correction = TRUE,
+                                       num_cores = "ALL") {
 
   # Transform Data to be [0, 1]
   X_trans <- min_max_transform_X(X)
@@ -221,7 +223,7 @@ posterior_stat_points_diff_mcmc <- function(X, Y, num_betas, num_stationary, fir
   map_result <- suppressWarnings(find_map(n_chains, input_X, input_Y, num_betas,
                                           first_direction, zero_is_zero,
                                           interpolation, b_vec,
-                         prior_mean, prior_sd))
+                         prior_mean, prior_sd, num_cores))
 
 
   # Get posterior modes and the inverse Hessians
@@ -236,7 +238,7 @@ posterior_stat_points_diff_mcmc <- function(X, Y, num_betas, num_stationary, fir
   mcmc_samples <- suppressWarnings(mcmc_parallel(posterior_modes, n_per_chain,
                                                  input_X, input_Y, num_betas,
                                 first_direction, zero_is_zero, interpolation, b_vec,
-                                prior_mean, prior_sd, cov_scale))
+                                prior_mean, prior_sd, cov_scale, num_cores))
 
   print("Calculating Stationary Points")
   resampled <- do.call(rbind, mcmc_samples$mcmc_samples)
